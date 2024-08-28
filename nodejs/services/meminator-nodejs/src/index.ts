@@ -1,3 +1,4 @@
+import './tracing';
 import express, { Request, Response } from 'express';
 import { download } from "./download";
 import { applyTextWithImagemagick } from "./applyTextWithImagemagick";
