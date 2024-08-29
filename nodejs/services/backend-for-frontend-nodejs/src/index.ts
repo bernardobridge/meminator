@@ -1,4 +1,4 @@
-import './tracing';
+import './tracing/auto';
 import express, { Request, Response } from 'express';
 import healthcheck from 'express-healthcheck';
 import { fetchFromService } from "./internal-service-lib";
