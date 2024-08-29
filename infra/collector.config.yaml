@@ -11,9 +11,11 @@ exporters:
   debug:
 
   otlphttp:
-    endpoint: "https://api.honeycomb.io"
+    endpoint: "http://refinery:8080"
+    tls:
+      insecure: true
     headers:
-      "x-honeycomb-team": "${env:HONEYCOMB_API_KEY}"
+      "x-honeycomb-team": "${env:HONEYCOMB_API_KEY}" 
 
 service:
   telemetry:

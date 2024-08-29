@@ -68,5 +68,14 @@ services:
       - ./infra/collector.config.yaml:/etc/otel-collector-config.yml
     ports:
       - "4318:4318" # For OTLP gRPC receiver
+      - "4317:4317"
     env_file:
       - .env
+
+  refinery:
+    image: "honeycombio/refinery"
+    env_file:
+      - .env
+    volumes:
+      - ./infra/refinery.config.yaml:/etc/refinery/refinery.yaml
+      - ./infra/refinery.rules.yaml:/etc/refinery/rules.yaml

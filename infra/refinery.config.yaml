@@ -1,0 +1,13 @@
+General:
+  ConfigurationVersion: 2
+RefineryTelemetry:
+  AddRuleReasonToTrace: true
+StressRelief:
+  ActivationLevel: 85
+  DeactivationLevel: 50
+  Mode: monitor
+Traces:
+  SendDelay: 10s
+  TraceTimeout: 10s
+Logger:
+  Level: info
