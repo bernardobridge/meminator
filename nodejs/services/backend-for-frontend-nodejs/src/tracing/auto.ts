@@ -3,6 +3,15 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { ExpressLayerType } from '@opentelemetry/instrumentation-express';
 import { SERVICE_NAME } from './custom';
+import {
+    diag,
+    DiagConsoleLogger,
+    DiagLogLevel
+} from '@opentelemetry/api';
+
+if (process.env.DEBUG) {
+    diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR);
+} 
 
 const sdk: NodeSDK = new NodeSDK({
     traceExporter: new OTLPTraceExporter(),
