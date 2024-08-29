@@ -14,6 +14,25 @@ app.get("/health", (req: Request, res: Response) => {
     res.send("OK");
 });
 
+async function simulateDelay(imageUrl: string): Promise<void> {
+    const delayedImages = [
+        "cat-with-bowtie.heic",
+        "cat.jpg",
+        "clementine.png",
+        "cow-peeking.jpg",
+        "different-animals-01.png",
+        "dratini.png",
+        "everything-is-an-experiment.png",
+    ];
+
+    if (delayedImages.some(delayedImage => imageUrl.includes(delayedImage))) {
+        const delayMs = 12000; // 12 seconds delay
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+    } else {
+        return;
+    }
+}
+
 app.post('/applyPhraseToPicture', async (req, res) => {
         try {
             const input = req.body;
@@ -23,6 +42,8 @@ app.post('/applyPhraseToPicture', async (req, res) => {
             const span = trace.getSpan(context.active())!;
             span.setAttribute('phrase', phrase);
             span.setAttribute('imageUrl', imageUrl);
+
+            await simulateDelay(imageUrl)
     
             // download the image, defaulting to a local image
             const inputImagePath = await download(imageUrl);
