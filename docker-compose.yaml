@@ -59,4 +59,14 @@ services:
       meminator:
         condition: service_started
       phrase-picker:
-        condition: service_started        
+        condition: service_started  
+  
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    command: ["--config=/etc/otel-collector-config.yml"]
+    volumes:
+      - ./infra/collector.config.yaml:/etc/otel-collector-config.yml
+    ports:
+      - "4318:4318" # For OTLP gRPC receiver
+    env_file:
+      - .env
