@@ -2,14 +2,27 @@ import './tracing/auto';
 import express, { Request, Response } from 'express';
 import healthcheck from 'express-healthcheck';
 import { fetchFromService } from "./internal-service-lib";
+import { trace, context } from './tracing/custom';
 
 const app = express();
 const PORT = 10115;
 app.use(express.json());
 app.use('/health', healthcheck());
 
+let requestCount = 0;
+
+async function simulateGradualDegradation (count: number) {
+    const delay = 50 * (requestCount);
+    await new Promise(resolve => setTimeout(resolve, delay));
+
+    // Log the current delay for monitoring purposes
+    console.log(`Request ${count}: Added delay of ${delay}ms`);
+}
+
 app.post('/createPicture', async (req: Request, res: Response) => {
     try {
+        requestCount++;
+        await simulateGradualDegradation(requestCount);
         const [phraseResponse, imageResponse] = await Promise.all([
             fetchFromService('phrase-picker'),
             fetchFromService('image-picker')
