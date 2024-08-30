@@ -15,6 +15,9 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 async function simulateDelay(imageUrl: string): Promise<void> {
+    if (!process.env.SIMULATE_IMG_DELAY) {
+        return;
+    }
     const delayedImages = [
         "cat-with-bowtie.heic",
         "cat.jpg",
