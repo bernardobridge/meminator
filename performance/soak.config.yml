@@ -1,0 +1,10 @@
+config:
+  target: "http://localhost:10114/"
+  phases:
+    - duration: 5min
+      arrivalRate: 10
+      maxVusers: 10
+      name: "Phase 1"
+  processor: "./processor.ts"
+  engines:
+    playwright: {}

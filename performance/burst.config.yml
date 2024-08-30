@@ -1,0 +1,9 @@
+config:
+  target: "http://localhost:10114/"
+  phases:
+    - duration: 15
+      arrivalRate: 2
+      name: "Phase 1"
+  processor: "./processor.ts"
+  engines:
+    playwright: {}

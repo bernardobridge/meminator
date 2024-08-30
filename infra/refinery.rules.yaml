@@ -1,0 +1,15 @@
+RulesVersion: 2
+
+Samplers:
+    __default__:
+        DeterministicSampler:
+            SampleRate: 1
+    test:
+        RulesBasedSampler:
+            Rules:
+                - Name: drop healthchecks
+                  Drop: true
+                  Conditions:
+                    - Field: http.route
+                      Operator: =
+                      Value: /health

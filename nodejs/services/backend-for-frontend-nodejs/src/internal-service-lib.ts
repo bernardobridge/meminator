@@ -1,3 +1,5 @@
+import { tracer, conventions } from "./tracing/custom";
+
 /**
  * This represents an internal library used for communication between services.
  * That is a common pattern, and a great place to customize some telemetry.
@@ -23,18 +25,27 @@ type FetchOptions = {
  * @returns 
  */
 export async function fetchFromService(service: keyof typeof SERVICES, options?: FetchOptions) {
-    const { method, body: bodyObject } = options || { method: "GET" };
-    let body: string | null = null;
-    if (bodyObject) {
-        body = JSON.stringify(bodyObject);
-    }
-    const headers: Record<string, string> = {
-        "Content-Type": "application/json"
-    }
+    return tracer.startActiveSpan('fetchFromService', async (span) => { 
+        const { method, body: bodyObject } = options || { method: "GET" };
+        let body: string | null = null;
+        if (bodyObject) {
+            body = JSON.stringify(bodyObject);
+        }
+        const headers: Record<string, string> = {
+            "Content-Type": "application/json"
+        }
+    
+        const url = SERVICES[service];
 
-    const url = SERVICES[service];
+        span.setAttribute('meminator.target.service', service);
+        span.setAttribute(conventions.ATTR_HTTP_REQUEST_METHOD, method || 'GET');
+        span.setAttribute('meminator.target.url', url);
+        span.setAttribute('meminator.request_body.size', body ? body.length : 0)
+    
+        const response = await fetch(url, { headers, method, body });
 
-    const response = await fetch(url, { headers, method, body });
-
-    return response;
+        span.end();
+    
+        return response;
+    });
 }
